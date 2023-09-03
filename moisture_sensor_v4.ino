@@ -9,6 +9,7 @@ const int AirValue = 725;   //you need to replace this value with Value_1
 const int WaterValue = 310;  //you need to replace this value with Value_2
 int soilMoistureValue = 0;
 int soilMosturePercent = 0;
+String macAddress;
 
 int i = 0;
 int statusCode;
@@ -56,6 +57,7 @@ void setup()
   if (testWifi())
   {
     Serial.println("Succesfully Connected!!!");
+    macAddress = WiFi.macAddress();
     return;
   }
   else
@@ -104,8 +106,10 @@ void loop() {
     http.addHeader("Accept-Encoding", "gzip, deflate, br");
     
     // Create the JSON data you want to send in the request body
-    String jsonData = "{\"sensor_id\":\"10\",\"moisture\":\""+String(soilMosturePercent)+"\"}";
+    String jsonData = "{\"sensor_id\":\""+macAddress+"\",\"moisture\":\""+String(soilMosturePercent)+"\"}";
 
+    Serial.print("jsonData");
+    Serial.print(jsonData);
     int httpResponseCode = http.POST(jsonData);
 
     Serial.print("HTTP Response code: ");
